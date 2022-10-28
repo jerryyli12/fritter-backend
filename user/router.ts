@@ -148,4 +148,16 @@ router.delete(
   }
 );
 
+router.get(
+  '/:userId?',
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUserExists
+  ],
+  async (req: Request, res: Response) => {
+    const user = await UserCollection.findOneByUserId(req.params.userId);
+    res.status(200).json(util.constructUserResponse(user));
+  }
+)
+
 export {router as userRouter};

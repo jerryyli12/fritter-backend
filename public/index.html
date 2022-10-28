@@ -8,6 +8,9 @@
   <script src="/scripts/freet.js"></script>
   <script src="/scripts/user.js"></script>
   <script src="/scripts/community.js"></script>
+  <script src="/scripts/event.js"></script>
+  <script src="/scripts/like.js"></script>
+  <script src="/scripts/controversial.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -74,10 +77,29 @@
           <input type="submit" value="Sign out">
         </form>
 
+        <form id="view-user">
+          <h3>View User Info</h3>
+          <div>
+            <label for="userId">User ID:</label>
+            <input id="userId" name="userId">
+          </div>
+          <input type="submit" value="View User Info">
+        </form>
+
+        <form id="view-controversial-setting">
+          <h3>View Controversial Setting</h3>
+          <input type="submit" value="View Controversial Setting">
+        </form>
+
+        <form id="toggle-controversial-setting">
+          <h3>Toggle Controversial Setting</h3>
+          <input type="submit" value="Toggle Controversial Setting">
+        </form>
+
         <form id="view-all-freets">
-            <h3>View All Freets</h3>
-            <input type="submit" value="View All Freets">
-          </form>
+          <h3>View All Freets</h3>
+          <input type="submit" value="View All Freets">
+        </form>
 
         <form id="view-freets-by-author">
           <h3>View Freets By Author</h3>
@@ -90,6 +112,10 @@
 
         <form id="create-freet">
           <h3>Create Freet</h3>
+          <div>
+            <label for="communityId">Community ID:</label>
+            <input id="communityId" name="communityId">
+          </div>
           <div>
             <label for="content">Content:</label>
             <textarea id="content" name="content"></textarea>
@@ -119,6 +145,38 @@
           <input type="submit" value="Delete Freet">
         </form>
 
+        <form id="toggle-like-freet">
+          <h3>Toggle Like Freet</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <input type="submit" value="Toggle Like Freet">
+        </form>
+
+        <form id="view-user-liked-freets">
+          <h3>View User's Liked Freets</h3>
+          <div>
+            <label for="user">User:</label>
+            <input id="user" name="user">
+          </div>
+          <input type="submit" value="View User's Liked Freets">
+        </form>
+
+        <form id="toggle-controversial-freet">
+          <h3>Toggle Controversial Freet</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <input type="submit" value="Toggle Controversial Freet">
+        </form>
+
+        <form id="view-all-communities">
+          <h3>View All Communities</h3>
+          <input type="submit" value="View All Communities">
+        </form>
+
         <form id="create-community">
           <h3>Create Community</h3>
           <div>
@@ -127,6 +185,119 @@
           </div>
           <input type="submit" value="Create Community">
         </form>
+
+        <form id="view-community">
+          <h3>View Community</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <input type="submit" value="View Community">
+        </form>
+
+        <form id="view-user-communities">
+          <h3>View User Communities</h3>
+          <input type="submit" value="View User Communities">
+        </form>
+
+        <!-- <form id="view-membership-in-community">
+          <h3>View Membership In Community</h3>
+          <div>
+            <label for="communityId">Community ID:</label>
+            <input id="communityId" name="communityId">
+          </div>
+          <input type="submit" value="View Membership In Community">
+        </form> -->
+
+        <form id="toggle-membership-in-community">
+          <h3>Toggle Membership In Community</h3>
+          <div>
+            <label for="communityId">Community ID:</label>
+            <input id="communityId" name="communityId">
+          </div>
+          <input type="submit" value="Toggle Membership In Community">
+        </form>
+
+        <form id="view-all-events">
+          <h3>View All Events</h3>
+          <input type="submit" value="View All Events">
+        </form>
+
+        <form id="create-event">
+          <h3>Create Event</h3>
+          <div>
+            <label for="name">Name:</label>
+            <input id="name" name="name">
+          </div>
+          <div>
+            <label for="location">Location:</label>
+            <input id="location" name="location">
+          </div>
+          <div>
+            <label for="time">Date & Time:</label>
+            <input id="time" name="time">
+          </div>
+          <input type="submit" value="Create Event">
+        </form>
+
+        <form id="view-event">
+          <h3>View Event</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <input type="submit" value="View Event">
+        </form>
+
+        <form id="edit-event">
+          <h3>Edit Event</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <div>
+            <label for="location">Location:</label>
+            <input id="location" name="location">
+          </div>
+          <div>
+            <label for="time">Date & Time:</label>
+            <input id="time" name="time">
+          </div>
+          <input type="submit" value="Edit Event">
+        </form>
+
+        <form id="delete-event">
+          <h3>Delete Event</h3>
+          <div>
+            <label for="id">ID:</label>
+            <input id="id" name="id">
+          </div>
+          <input type="submit" value="Delete Event">
+        </form>
+
+        <form id="view-user-events">
+          <h3>View User Events</h3>
+          <input type="submit" value="View User Events">
+        </form>
+
+        <form id="toggle-attending-event">
+          <h3>Toggle Attending Event</h3>
+          <div>
+            <label for="eventId">Event ID:</label>
+            <input id="eventId" name="eventId">
+          </div>
+          <input type="submit" value="Toggle Attending Event">
+        </form>
+
+        <form id="toggle-interested-event">
+          <h3>Toggle Interested Event</h3>
+          <div>
+            <label for="eventId">Event ID:</label>
+            <input id="eventId" name="eventId">
+          </div>
+          <input type="submit" value="Toggle Interested Event">
+        </form>
+        
       </div>
     </section>
     <section>

@@ -175,24 +175,25 @@ The following api routes have already been implemented for you (**Make sure to d
 
 This renders the `index.html` file that will be used to interact with the backend
 
-#### `GET /api/freets` - Get all the freets
+#### `GET /api/freets` - Get all the freets not in a community
 
 **Returns**
 
-- An array of all freets sorted in descending order by date modified
+- An array of all freets not in a community sorted in descending order by date modified
 
-#### `GET /api/freets?author=USERNAME` - Get freets by author
+#### `GET /api/freets?author=USERNAME` - Get freets by author not in a community
 
 **Returns**
 
-- An array of freets created by user with username `author`
+- An array of freets not in a community created by user with username `author` in descending order by date modified
 
 **Throws**
 
 - `400` if `author` is not given
+- `403` if user is not logged in
 - `404` if `author` is not a recognized username of any user
 
-#### `POST /api/freets` - Create a new freet
+#### `POST /api/freets/:communityId?` - Create a new freet with optional community
 
 **Body**
 
@@ -208,6 +209,8 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 - `400` If the freet content is empty or a stream of empty spaces
 - `413` If the freet content is more than 140 characters long
+- `404` if the community doesn't exist
+- `403` if the user isn't in the community
 
 #### `DELETE /api/freets/:freetId?` - Delete an existing freet
 
@@ -313,3 +316,235 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+#### `GET /api/users/:userId?` - Get a user's info
+
+**Returns**
+
+- An object with the user details
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if empty username provided
+- `404` if user doesn't exist
+
+#### `GET /api/likes/?user=userId` - Get user's liked freets
+
+**Returns**
+
+- An object with the user's liked freets
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if empty username provided
+- `404` if user doesn't exist
+
+#### `PUT /api/likes/:freetId?` - Toggle like on freet
+
+**Returns**
+
+- A success message
+- The liked freet
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the freet doesn't exist
+
+#### `GET /api/controversials` - Get current user's controversial setting
+
+**Returns**
+
+- A boolean, the setting
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `PUT /api/controversials` - Toggle current user's controversial setting
+
+**Returns**
+
+- A boolean, the new setting
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `PUT /api/controversials/:freetId?` - Toggle controversial on freet
+
+**Returns**
+
+- A boolean, the setting
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the freet doesn't exist
+
+#### `GET /api/communities` - Gets all communities
+
+**Returns**
+
+- An object containing all communities
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/communities` - Create a new community
+
+**Body**
+
+- `name` _{string}_ - The community's name
+
+**Returns**
+
+- A success message
+- An object of the new community
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the name is empty
+
+#### `GET /api/communities/view/:communityId?` - Get a community
+
+**Returns**
+
+- An object of the community
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the name is empty
+- `404` if the community doesn't exist
+- `403` if the user isn't in the community
+
+#### `GET /api/communities/user` - Get my communities
+
+**Returns**
+
+- An object containing my communities
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `PUT /api/communities/user/:communityId?` - Toggle user's joined status in community
+
+**Returns**
+
+- A success message
+- An object the updated community
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the community doesn't exist
+
+#### `GET /api/events` - Get all events
+
+**Returns**
+
+- An object containing all events
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `POST /api/events` - Create a new event
+
+**Body**
+
+- `name` _{string}_ - The event name
+- `location` _{string}_ - The event location
+- `time` _{string}_ - The event date/time
+
+**Returns**
+
+- A success message
+- An object containing the new event
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the name, location, or date are not valid
+
+#### `GET /api/events/view/:eventId?` - Get an event
+
+**Returns**
+
+- An object containing the event
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the event doesn't exist
+
+#### `PUT /api/events/view/:eventId?` - Edit an event
+
+**Body**
+
+- `location` _{string}_ - The event location
+- `time` _{string}_ - The event date/time
+
+**Returns**
+
+- A success message
+- An object containing the event
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the event doesn't exist
+- `403` if user isn't the event creator
+- `400` if the location or time aren't valid
+
+#### `DELETE /api/events/view/:eventId?` - Delete an event
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the event doesn't exist
+- `403` if user isn't the event creator
+
+#### `GET /api/events/user` - Get my attending and interested events
+
+**Returns**
+
+- An object containing my attending and interested events
+
+**Throws**
+
+- `403` if the user is not logged in
+
+#### `PUT /api/events/user/attending/:eventId?` - Toggle user's attending status on event
+
+**Returns**
+
+- A success message
+- An object for the updated event
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the event doesn't exist
+
+#### `PUT /api/events/user/interested/:eventId?` - Toggle user's interested status on event
+
+**Returns**
+
+- A success message
+- An object for the updated event
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the event doesn't exist

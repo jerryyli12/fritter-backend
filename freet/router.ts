@@ -3,7 +3,9 @@ import express from 'express';
 import FreetCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as freetValidator from '../freet/middleware';
+import * as communityValidator from '../community/middleware';
 import * as util from './util';
+import CommunityCollection from '../community/collection';
 
 const router = express.Router();
 
@@ -27,6 +29,9 @@ const router = express.Router();
  */
 router.get(
   '/',
+  [
+    userValidator.isUserLoggedIn,
+  ],
   async (req: Request, res: Response, next: NextFunction) => {
     // Check if authorId query parameter was supplied
     if (req.query.author !== undefined) {
@@ -35,7 +40,7 @@ router.get(
     }
 
     const allFreets = await FreetCollection.findAll();
-    const response = allFreets.map(util.constructFreetResponse);
+    const response = await Promise.all(allFreets.map(m => util.constructFreetResponse(m, req.session.userId)));
     res.status(200).json(response);
   },
   [
@@ -43,7 +48,7 @@ router.get(
   ],
   async (req: Request, res: Response) => {
     const authorFreets = await FreetCollection.findAllByUsername(req.query.author as string);
-    const response = authorFreets.map(util.constructFreetResponse);
+    const response = await Promise.all(authorFreets.map(m => util.constructFreetResponse(m, req.session.userId)));
     res.status(200).json(response);
   }
 );
@@ -60,18 +65,35 @@ router.get(
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.post(
-  '/',
+  '/:communityId?',
   [
     userValidator.isUserLoggedIn,
     freetValidator.isValidFreetContent
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (req.params.communityId) {
+      next();
+      return;
+    }
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const freet = await FreetCollection.addOne(userId, req.body.content);
+    const freet = await FreetCollection.addOne(userId, req.body.content, '');
 
     res.status(201).json({
       message: 'Your freet was created successfully.',
-      freet: util.constructFreetResponse(freet)
+      freet: await util.constructFreetResponse(freet, userId)
+    });
+  },
+  [
+    communityValidator.isCommunityExists,
+    communityValidator.isUserInCommunity
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const freet = await FreetCollection.addOne(userId, req.body.content, req.params.communityId);
+
+    res.status(201).json({
+      message: 'Your freet was created successfully.',
+      freet: await util.constructFreetResponse(freet, userId)
     });
   }
 );
@@ -126,7 +148,7 @@ router.put(
     const freet = await FreetCollection.updateOne(req.params.freetId, req.body.content);
     res.status(200).json({
       message: 'Your freet was updated successfully.',
-      freet: util.constructFreetResponse(freet)
+      freet: await util.constructFreetResponse(freet, req.session.userId)
     });
   }
 );
